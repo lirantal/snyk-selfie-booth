@@ -1,5 +1,7 @@
 import { generateText } from 'ai'
 import { createGoogleGenerativeAI } from '@ai-sdk/google'
+import { readFile } from 'fs/promises'
+import { join } from 'path'
 
 export default defineEventHandler(async (event) => {
   try {
@@ -45,13 +47,10 @@ export default defineEventHandler(async (event) => {
     // Convert uploaded image to Uint8Array
     const userImageUint8Array = new Uint8Array(imageFile.data)
 
-    // Fetch Yoda image
-    const yodaResponse = await fetch('https://miro.medium.com/v2/resize:fit:1400/1*adzOpocPYZe3dUDu8YtwWA.jpeg')
-    if (!yodaResponse.ok) {
-      throw new Error('Failed to fetch Yoda image')
-    }
-    const yodaArrayBuffer = await yodaResponse.arrayBuffer()
-    const yodaImageUint8Array = new Uint8Array(yodaArrayBuffer)
+    // Read Yoda image from local file
+    const yodaImagePath = join(process.cwd(), 'data', 'yoda-sitting.jpg')
+    const yodaImageBuffer = await readFile(yodaImagePath)
+    const yodaImageUint8Array = new Uint8Array(yodaImageBuffer)
 
     // Use AI SDK with generateText for Gemini 2.5 Flash Image (Nano Banana)
     // This model supports image editing/generation with input images
