@@ -63,7 +63,24 @@ export default defineEventHandler(async (event) => {
           content: [
             {
               type: 'text',
-              text: 'Generate a realistic selfie photo of the person in the first image together with Yoda from Star Wars (shown in the second image), both smiling and looking at the camera. The image should look natural and photorealistic, as if taken with a smartphone camera.'
+              text: 'COMPOSITION INSTRUCTIONS: Generate a single, hyper-realistic, high-detail selfie photograph. The foundational scene and background must be derived exclusively from the Yoda background image (shown below); this setting serves as the environment for the final image.'
+            },
+            {
+              type: 'text',
+              text: '[Yoda Background Image]'
+            },
+            {
+              type: 'image',
+              image: yodaImageUint8Array,
+              mediaType: 'image/jpeg'
+            },
+            {
+              type: 'text',
+              text: 'Integrate the person from the user selfie image (shown below) into the Yoda background, placing them standing close to Yoda. The final image should have a selfie-style perspective (close-up, intimate framing) as if taken from a first-person viewpoint, but DO NOT include any visible hands, smartphones, or camera equipment in the frame. The image should appear as if the camera is invisible, capturing a natural moment without showing the device or hand holding it.'
+            },
+            {
+              type: 'text',
+              text: '[User Selfie Image]'
             },
             {
               type: 'image',
@@ -71,9 +88,8 @@ export default defineEventHandler(async (event) => {
               mediaType: imageFile.type || 'image/jpeg'
             },
             {
-              type: 'image',
-              image: yodaImageUint8Array,
-              mediaType: 'image/jpeg'
+              type: 'text',
+              text: 'Both individuals must be smiling, looking directly into the lens, and their precise facial likenesses, clothing, and details from tyouheir respective input images must be accurately and seamlessly preserved. Maintain consistent, warm, soft, natural daylight and ensure the overall vibe is joyful and spontaneous. The final image must appear as a spontaneous, single-shot photograph taken in the original environment of the Yoda background image. IMPORTANT: Do not include any visible hands, smartphones, phones, or camera equipment in the final image - only show the people and background.'
             }
           ]
         }
