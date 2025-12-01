@@ -55,6 +55,14 @@ export default defineEventHandler(async (event) => {
     // Use AI SDK with generateText for Gemini 2.5 Flash Image (Nano Banana)
     // This model supports image editing/generation with input images
     const googleProvider = createGoogleGenerativeAI({ apiKey: apiKey })
+    
+    // debug logs
+    // console.log('=== AI SDK Request Debug ===')
+    // console.log('Model: gemini-2.5-flash-image')
+    // console.log('Yoda image size:', yodaImageUint8Array.length, 'bytes')
+    // console.log('User image size:', userImageUint8Array.length, 'bytes')
+    // console.log('User image type:', imageFile.type || 'image/jpeg')
+    
     const result = await generateText({
       model: googleProvider('gemini-2.5-flash-image'),
       prompt: [
@@ -96,10 +104,39 @@ export default defineEventHandler(async (event) => {
       ]
     })
 
+    // Debug: Log the full response structure
+    // console.log('=== AI SDK Response Debug ===')
+    // console.log('Result type:', typeof result)
+    // console.log('Result.files length:', result.files?.length)
+    // console.log('Result.text:', result.text)
+    // console.log('Result.text length:', result.text?.length)
+    
+    // Debug: Log the files array details
+    // if (result.files && Array.isArray(result.files)) {
+    //   console.log('Files array details:')
+    //   result.files.forEach((file: any, index: number) => {
+    //     console.log(`  File ${index}:`, {
+    //       type: typeof file,
+    //       keys: Object.keys(file || {}),
+    //       mediaType: file?.mediaType,
+    //       hasUint8Array: !!file?.uint8Array,
+    //       uint8ArrayLength: file?.uint8Array?.length
+    //     })
+    //   })
+    // }
+    
+    // Debug: Log the token usage
+    // if ((result as any).usage) {
+    //   console.log('Result.usage:', (result as any).usage)
+    // }
+
     // Extract the generated image from result.files
     const generatedImageFile = result.files?.find(file => file.mediaType?.startsWith('image/'))
     
     if (!generatedImageFile) {
+      console.error('=== Error: No image file found ===')
+      console.error('Available files:', result.files)
+      console.error('Result text content:', result.text)
       throw new Error('No image was generated in the response')
     }
 
