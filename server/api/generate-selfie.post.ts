@@ -47,7 +47,7 @@ export default defineEventHandler(async (event) => {
     // Convert uploaded image to Uint8Array
     const userImageUint8Array = new Uint8Array(imageFile.data)
 
-    // Read Yoda image from local file
+    // Read Hackers scene image from local file
     const baseImagePath = join(process.cwd(), 'data', 'base-image.jpg')
     const baseImageBuffer = await readFile(baseImagePath)
     const baseImageUint8Array = new Uint8Array(baseImageBuffer)

@@ -1,13 +1,14 @@
 <template>
   <div class="container">
-    <div class="stars"></div>
+    <div class="terminal-bg"></div>
+    <div class="scanlines"></div>
     <div class="content">
       <header class="header">
         <h1 class="title">
-          <span class="title-main">Selfie with</span>
-          <span class="title-yoda">Yoda</span>
+          <span class="title-main">HACKERS</span>
+          <span class="title-hackers">SELFIE BOOTH</span>
         </h1>
-        <p class="subtitle">May the Force be with your selfie</p>
+        <p class="subtitle">Hack the planet. Access granted.</p>
       </header>
 
       <div class="upload-section">
@@ -18,7 +19,7 @@
               <polyline points="17 8 12 3 7 8"></polyline>
               <line x1="12" y1="3" x2="12" y2="15"></line>
             </svg>
-            <span>Upload Your Photo</span>
+            <span>> UPLOAD PHOTO</span>
           </label>
           <input
             id="file-upload"
@@ -35,29 +36,29 @@
             <button @click="resetUpload" class="reset-button">×</button>
           </div>
           <button @click="generateSelfie" class="generate-button">
-            Generate Selfie with Yoda
+            > GENERATE HACKERS SELFIE
           </button>
         </div>
 
         <div v-if="loading" class="loading-section">
           <div class="spinner"></div>
-          <p class="loading-text">The Force is strong with this one...</p>
-          <p class="loading-subtext">Generating your selfie</p>
+          <p class="loading-text">> ACCESSING MAINFRAME...</p>
+          <p class="loading-subtext">> COMPOSITING IMAGE...</p>
         </div>
 
         <div v-if="generatedImage && !loading" class="result-section">
           <div class="result-image-container">
-            <img :src="generatedImage" alt="Selfie with Yoda" class="result-image" />
+            <img :src="generatedImage" alt="Hackers Selfie" class="result-image" />
           </div>
           <div class="result-actions">
-            <button @click="downloadImage" class="download-button">Download</button>
-            <button @click="resetAll" class="reset-all-button">Create Another</button>
+            <button @click="downloadImage" class="download-button">> DOWNLOAD</button>
+            <button @click="resetAll" class="reset-all-button">> NEW HACK</button>
           </div>
         </div>
 
         <div v-if="error" class="error-message">
           <p>{{ error }}</p>
-          <button @click="clearError" class="error-button">Try Again</button>
+          <button @click="clearError" class="error-button">> RETRY</button>
         </div>
       </div>
     </div>
@@ -168,7 +169,7 @@ const downloadImage = () => {
 
   const link = document.createElement('a')
   link.href = generatedImage.value
-  link.download = 'selfie-with-yoda.jpg'
+  link.download = 'hackers-selfie.jpg'
   document.body.appendChild(link)
   link.click()
   document.body.removeChild(link)
@@ -178,35 +179,51 @@ const downloadImage = () => {
 <style scoped>
 .container {
   min-height: 100vh;
-  background: linear-gradient(180deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+  background: #000000;
   position: relative;
   overflow-x: hidden;
   padding: 2rem 1rem;
+  font-family: 'Courier New', 'Monaco', 'Consolas', monospace;
 }
 
-.stars {
+.terminal-bg {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: 
-    radial-gradient(2px 2px at 20% 30%, #fff, transparent),
-    radial-gradient(2px 2px at 60% 70%, #fff, transparent),
-    radial-gradient(1px 1px at 50% 50%, #fff, transparent),
-    radial-gradient(1px 1px at 80% 10%, #fff, transparent),
-    radial-gradient(2px 2px at 90% 60%, #fff, transparent),
-    radial-gradient(1px 1px at 33% 80%, #fff, transparent),
-    radial-gradient(1px 1px at 10% 40%, #fff, transparent);
-  background-size: 200% 200%;
-  animation: twinkle 20s linear infinite;
+  background: 
+    repeating-linear-gradient(
+      0deg,
+      rgba(0, 255, 65, 0.03) 0px,
+      transparent 1px,
+      transparent 2px,
+      rgba(0, 255, 65, 0.03) 3px
+    );
   pointer-events: none;
-  opacity: 0.6;
+  opacity: 0.5;
+  z-index: 0;
 }
 
-@keyframes twinkle {
-  0% { background-position: 0% 0%; }
-  100% { background-position: 100% 100%; }
+.scanlines {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    transparent 50%,
+    rgba(0, 255, 65, 0.03) 50%
+  );
+  background-size: 100% 4px;
+  pointer-events: none;
+  z-index: 0;
+  animation: scanline 8s linear infinite;
+}
+
+@keyframes scanline {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(4px); }
 }
 
 .content {
@@ -228,54 +245,77 @@ const downloadImage = () => {
   margin: 0;
   line-height: 1.2;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.15em;
+  font-family: 'Courier New', monospace;
 }
 
 .title-main {
   display: block;
-  color: #fff;
-  text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+  color: #00ff41;
+  text-shadow: 
+    0 0 10px rgba(0, 255, 65, 0.6),
+    0 0 20px rgba(0, 255, 65, 0.4);
 }
 
-.title-yoda {
+.title-hackers {
   display: block;
-  color: #4ade80;
+  color: #00ff41;
   text-shadow: 
-    0 0 10px rgba(74, 222, 128, 0.8),
-    0 0 20px rgba(74, 222, 128, 0.6),
-    0 0 30px rgba(74, 222, 128, 0.4);
+    0 0 10px rgba(0, 255, 65, 0.8),
+    0 0 20px rgba(0, 255, 65, 0.6),
+    0 0 30px rgba(0, 255, 65, 0.4),
+    0 0 40px rgba(0, 255, 65, 0.2);
   animation: glow 2s ease-in-out infinite alternate;
+  font-family: 'Courier New', monospace;
 }
 
 @keyframes glow {
   from {
     text-shadow: 
-      0 0 10px rgba(74, 222, 128, 0.8),
-      0 0 20px rgba(74, 222, 128, 0.6),
-      0 0 30px rgba(74, 222, 128, 0.4);
+      0 0 10px rgba(0, 255, 65, 0.8),
+      0 0 20px rgba(0, 255, 65, 0.6),
+      0 0 30px rgba(0, 255, 65, 0.4),
+      0 0 40px rgba(0, 255, 65, 0.2);
   }
   to {
     text-shadow: 
-      0 0 20px rgba(74, 222, 128, 1),
-      0 0 30px rgba(74, 222, 128, 0.8),
-      0 0 40px rgba(74, 222, 128, 0.6);
+      0 0 20px rgba(0, 255, 65, 1),
+      0 0 30px rgba(0, 255, 65, 0.8),
+      0 0 40px rgba(0, 255, 65, 0.6),
+      0 0 50px rgba(0, 255, 65, 0.4);
   }
 }
 
 .subtitle {
-  color: #a0a0a0;
+  color: #00ff41;
   font-size: 1.2rem;
   margin-top: 1rem;
-  font-style: italic;
+  font-family: 'Courier New', monospace;
+  text-shadow: 0 0 5px rgba(0, 255, 65, 0.5);
+  opacity: 0.9;
 }
 
 .upload-section {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid #00ff41;
+  border-radius: 0;
   padding: 3rem 2rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  box-shadow: 
+    0 0 10px rgba(0, 255, 65, 0.3),
+    0 0 20px rgba(0, 255, 65, 0.2),
+    inset 0 0 20px rgba(0, 255, 65, 0.05);
+  position: relative;
+}
+
+.upload-section::before {
+  content: '>';
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  color: #00ff41;
+  font-size: 1.2rem;
+  font-family: 'Courier New', monospace;
+  opacity: 0.5;
 }
 
 .upload-area {
@@ -291,24 +331,32 @@ const downloadImage = () => {
   align-items: center;
   gap: 0.75rem;
   padding: 1rem 2rem;
-  background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
-  color: #000;
-  border: none;
-  border-radius: 12px;
+  background: #000;
+  color: #00ff41;
+  border: 2px solid #00ff41;
+  border-radius: 0;
   font-size: 1.1rem;
   font-weight: 700;
+  font-family: 'Courier New', monospace;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(74, 222, 128, 0.4);
+  transition: all 0.2s ease;
+  box-shadow: 
+    0 0 10px rgba(0, 255, 65, 0.3),
+    inset 0 0 10px rgba(0, 255, 65, 0.1);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 
 .upload-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(74, 222, 128, 0.6);
+  background: rgba(0, 255, 65, 0.1);
+  box-shadow: 
+    0 0 20px rgba(0, 255, 65, 0.5),
+    inset 0 0 20px rgba(0, 255, 65, 0.2);
+  text-shadow: 0 0 10px rgba(0, 255, 65, 0.8);
 }
 
 .upload-button:active {
-  transform: translateY(0);
+  background: rgba(0, 255, 65, 0.2);
 }
 
 .preview-section {
@@ -320,9 +368,12 @@ const downloadImage = () => {
 
 .image-preview {
   position: relative;
-  border-radius: 12px;
+  border: 2px solid #00ff41;
+  border-radius: 0;
   overflow: hidden;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  box-shadow: 
+    0 0 15px rgba(0, 255, 65, 0.3),
+    inset 0 0 15px rgba(0, 255, 65, 0.1);
 }
 
 .preview-image {
@@ -337,37 +388,47 @@ const downloadImage = () => {
   right: 10px;
   width: 36px;
   height: 36px;
-  background: rgba(0, 0, 0, 0.7);
-  color: #fff;
-  border: none;
-  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.8);
+  color: #ff0040;
+  border: 2px solid #ff0040;
+  border-radius: 0;
   font-size: 24px;
   line-height: 1;
   cursor: pointer;
   transition: all 0.2s ease;
+  font-family: 'Courier New', monospace;
+  box-shadow: 0 0 10px rgba(255, 0, 64, 0.3);
 }
 
 .reset-button:hover {
-  background: rgba(220, 38, 38, 0.9);
-  transform: scale(1.1);
+  background: rgba(255, 0, 64, 0.2);
+  box-shadow: 0 0 15px rgba(255, 0, 64, 0.6);
 }
 
 .generate-button {
   padding: 1rem 2.5rem;
-  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-  color: #000;
-  border: none;
-  border-radius: 12px;
+  background: #000;
+  color: #00ff41;
+  border: 2px solid #00ff41;
+  border-radius: 0;
   font-size: 1.1rem;
   font-weight: 700;
+  font-family: 'Courier New', monospace;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(251, 191, 36, 0.4);
+  transition: all 0.2s ease;
+  box-shadow: 
+    0 0 10px rgba(0, 255, 65, 0.3),
+    inset 0 0 10px rgba(0, 255, 65, 0.1);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 
 .generate-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(251, 191, 36, 0.6);
+  background: rgba(0, 255, 65, 0.1);
+  box-shadow: 
+    0 0 20px rgba(0, 255, 65, 0.5),
+    inset 0 0 20px rgba(0, 255, 65, 0.2);
+  text-shadow: 0 0 10px rgba(0, 255, 65, 0.8);
 }
 
 .loading-section {
@@ -378,11 +439,12 @@ const downloadImage = () => {
 .spinner {
   width: 60px;
   height: 60px;
-  border: 4px solid rgba(74, 222, 128, 0.2);
-  border-top-color: #4ade80;
-  border-radius: 50%;
+  border: 4px solid rgba(0, 255, 65, 0.2);
+  border-top-color: #00ff41;
+  border-radius: 0;
   margin: 0 auto 1.5rem;
   animation: spin 1s linear infinite;
+  box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
 }
 
 @keyframes spin {
@@ -390,16 +452,21 @@ const downloadImage = () => {
 }
 
 .loading-text {
-  color: #4ade80;
+  color: #00ff41;
   font-size: 1.3rem;
   font-weight: 600;
   margin: 0;
+  font-family: 'Courier New', monospace;
+  text-shadow: 0 0 10px rgba(0, 255, 65, 0.6);
 }
 
 .loading-subtext {
-  color: #a0a0a0;
+  color: #00ff41;
   font-size: 1rem;
   margin-top: 0.5rem;
+  font-family: 'Courier New', monospace;
+  opacity: 0.7;
+  text-shadow: 0 0 5px rgba(0, 255, 65, 0.4);
 }
 
 .result-section {
@@ -410,10 +477,12 @@ const downloadImage = () => {
 }
 
 .result-image-container {
-  border-radius: 12px;
+  border-radius: 0;
   overflow: hidden;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-  border: 2px solid rgba(74, 222, 128, 0.3);
+  box-shadow: 
+    0 0 20px rgba(0, 255, 65, 0.4),
+    inset 0 0 20px rgba(0, 255, 65, 0.1);
+  border: 2px solid #00ff41;
 }
 
 .result-image {
@@ -432,43 +501,60 @@ const downloadImage = () => {
 .download-button,
 .reset-all-button {
   padding: 0.875rem 2rem;
-  border: none;
-  border-radius: 12px;
+  border: 2px solid #00ff41;
+  border-radius: 0;
   font-size: 1rem;
   font-weight: 600;
+  font-family: 'Courier New', monospace;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 
 .download-button {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-  color: #fff;
-  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+  background: #000;
+  color: #00ff41;
+  box-shadow: 
+    0 0 10px rgba(0, 255, 65, 0.3),
+    inset 0 0 10px rgba(0, 255, 65, 0.1);
 }
 
 .download-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.6);
+  background: rgba(0, 255, 65, 0.1);
+  box-shadow: 
+    0 0 20px rgba(0, 255, 65, 0.5),
+    inset 0 0 20px rgba(0, 255, 65, 0.2);
+  text-shadow: 0 0 10px rgba(0, 255, 65, 0.8);
 }
 
 .reset-all-button {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: #000;
+  color: #00ff41;
+  box-shadow: 
+    0 0 10px rgba(0, 255, 65, 0.3),
+    inset 0 0 10px rgba(0, 255, 65, 0.1);
 }
 
 .reset-all-button:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: translateY(-2px);
+  background: rgba(0, 255, 65, 0.1);
+  box-shadow: 
+    0 0 20px rgba(0, 255, 65, 0.5),
+    inset 0 0 20px rgba(0, 255, 65, 0.2);
+  text-shadow: 0 0 10px rgba(0, 255, 65, 0.8);
 }
 
 .error-message {
   text-align: center;
   padding: 2rem;
-  background: rgba(220, 38, 38, 0.1);
-  border: 1px solid rgba(220, 38, 38, 0.3);
-  border-radius: 12px;
-  color: #fca5a5;
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid #ff0040;
+  border-radius: 0;
+  color: #ff0040;
+  font-family: 'Courier New', monospace;
+  box-shadow: 
+    0 0 15px rgba(255, 0, 64, 0.3),
+    inset 0 0 15px rgba(255, 0, 64, 0.1);
 }
 
 .error-message p {
@@ -478,18 +564,28 @@ const downloadImage = () => {
 
 .error-button {
   padding: 0.75rem 1.5rem;
-  background: rgba(220, 38, 38, 0.2);
-  color: #fca5a5;
-  border: 1px solid rgba(220, 38, 38, 0.3);
-  border-radius: 8px;
+  background: #000;
+  color: #ff0040;
+  border: 2px solid #ff0040;
+  border-radius: 0;
   font-size: 1rem;
   font-weight: 600;
+  font-family: 'Courier New', monospace;
   cursor: pointer;
   transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  box-shadow: 
+    0 0 10px rgba(255, 0, 64, 0.3),
+    inset 0 0 10px rgba(255, 0, 64, 0.1);
 }
 
 .error-button:hover {
-  background: rgba(220, 38, 38, 0.3);
+  background: rgba(255, 0, 64, 0.1);
+  box-shadow: 
+    0 0 20px rgba(255, 0, 64, 0.5),
+    inset 0 0 20px rgba(255, 0, 64, 0.2);
+  text-shadow: 0 0 10px rgba(255, 0, 64, 0.8);
 }
 
 @media (max-width: 640px) {
@@ -516,4 +612,3 @@ const downloadImage = () => {
   }
 }
 </style>
-
