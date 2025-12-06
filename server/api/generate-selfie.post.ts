@@ -48,9 +48,9 @@ export default defineEventHandler(async (event) => {
     const userImageUint8Array = new Uint8Array(imageFile.data)
 
     // Read Yoda image from local file
-    const yodaImagePath = join(process.cwd(), 'data', 'yoda-sitting.jpg')
-    const yodaImageBuffer = await readFile(yodaImagePath)
-    const yodaImageUint8Array = new Uint8Array(yodaImageBuffer)
+    const baseImagePath = join(process.cwd(), 'data', 'base-image.jpg')
+    const baseImageBuffer = await readFile(baseImagePath)
+    const baseImageUint8Array = new Uint8Array(baseImageBuffer)
 
     // Use AI SDK with generateText for Gemini 2.5 Flash Image (Nano Banana)
     // This model supports image editing/generation with input images
@@ -59,7 +59,7 @@ export default defineEventHandler(async (event) => {
     // debug logs
     // console.log('=== AI SDK Request Debug ===')
     // console.log('Model: gemini-2.5-flash-image')
-    // console.log('Yoda image size:', yodaImageUint8Array.length, 'bytes')
+    // console.log('Base image size:', baseImageUint8Array.length, 'bytes')
     // console.log('User image size:', userImageUint8Array.length, 'bytes')
     // console.log('User image type:', imageFile.type || 'image/jpeg')
     
@@ -71,20 +71,20 @@ export default defineEventHandler(async (event) => {
           content: [
             {
               type: 'text',
-              text: 'COMPOSITION INSTRUCTIONS: Generate a single, hyper-realistic, high-detail selfie photograph. The foundational scene and background must be derived exclusively from the Yoda background image (shown below); this setting serves as the environment for the final image.'
+              text: 'COMPOSITION INSTRUCTIONS: Generate a single, hyper-realistic, high-detail selfie photograph. The foundational scene and background must be derived exclusively from the BASE background image (shown below); this setting serves as the environment for the final image.'
             },
             {
               type: 'text',
-              text: '[Yoda Background Image]'
+              text: '[BASE Background Image]'
             },
             {
               type: 'image',
-              image: yodaImageUint8Array,
+              image: baseImageUint8Array,
               mediaType: 'image/jpeg'
             },
             {
               type: 'text',
-              text: 'Integrate the person from the user selfie image (shown below) into the Yoda background, placing them standing close to Yoda. The final image should have a selfie-style perspective (close-up, intimate framing) as if taken from a first-person viewpoint, but DO NOT include any visible hands, smartphones, or camera equipment in the frame. The image should appear as if the camera is invisible, capturing a natural moment without showing the device or hand holding it.'
+              text: 'Integrate the person from the user selfie image (shown below) into the BASE background image, placing them standing close together. The final image should have a selfie-style perspective (close-up, intimate framing) as if taken from a first-person viewpoint, but DO NOT include any visible hands, smartphones, or camera equipment in the frame. The image should appear as if the camera is invisible, capturing a natural moment without showing the device or hand holding it.'
             },
             {
               type: 'text',
@@ -97,7 +97,7 @@ export default defineEventHandler(async (event) => {
             },
             {
               type: 'text',
-              text: 'Both individuals must be smiling, looking directly into the lens, and their precise facial likenesses, clothing, and details from tyouheir respective input images must be accurately and seamlessly preserved. Maintain consistent, warm, soft, natural daylight and ensure the overall vibe is joyful and spontaneous. The final image must appear as a spontaneous, single-shot photograph taken in the original environment of the Yoda background image. IMPORTANT: Do not include any visible hands, smartphones, phones, or camera equipment in the final image - only show the people and background.'
+              text: 'Both individuals must be smiling, looking directly into the lens, and their precise facial likenesses, clothing, and details from tyouheir respective input images must be accurately and seamlessly preserved. Maintain consistent, warm, soft, natural daylight and ensure the overall vibe is joyful and spontaneous. The final image must appear as a spontaneous, single-shot photograph taken in the original environment of the BASE background image. IMPORTANT: Do not include any visible hands, smartphones, phones, or camera equipment in the final image - only show the people and background.'
             }
           ]
         }
