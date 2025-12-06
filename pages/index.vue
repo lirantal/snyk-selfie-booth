@@ -3,6 +3,10 @@
     <div class="terminal-bg"></div>
     <div class="scanlines"></div>
     <div class="content">
+      <div class="branding">
+        <p class="powered-by">POWERED BY</p>
+        <img src="/snyk-brand-logo.png" alt="Snyk" class="brand-logo" />
+      </div>
       <header class="header">
         <h1 class="title">
           <span class="title-main">HACKERS</span>
@@ -231,6 +235,31 @@ const downloadImage = () => {
   margin: 0 auto;
   position: relative;
   z-index: 1;
+}
+
+.branding {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-top: 1rem;
+}
+
+.brand-logo {
+  max-width: 200px;
+  height: auto;
+  display: block;
+  margin: 0 auto 0.5rem;
+  filter: drop-shadow(0 0 10px rgba(0, 255, 65, 0.3));
+}
+
+.powered-by {
+  color: #00ff41;
+  font-size: 0.9rem;
+  margin: 0;
+  font-family: 'Courier New', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  opacity: 0.8;
+  text-shadow: 0 0 5px rgba(0, 255, 65, 0.4);
 }
 
 .header {
@@ -589,6 +618,14 @@ const downloadImage = () => {
 }
 
 @media (max-width: 640px) {
+  .brand-logo {
+    max-width: 150px;
+  }
+
+  .powered-by {
+    font-size: 0.75rem;
+  }
+
   .title {
     font-size: 2.5rem;
   }
