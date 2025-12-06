@@ -97,7 +97,7 @@ export default defineEventHandler(async (event) => {
             },
             {
               type: 'text',
-              text: 'Both individuals must be smiling, looking directly into the lens, and their precise facial likenesses, clothing, and details from tyouheir respective input images must be accurately and seamlessly preserved. Maintain consistent, warm, soft, natural daylight and ensure the overall vibe is joyful and spontaneous. The final image must appear as a spontaneous, single-shot photograph taken in the original environment of the BASE background image. IMPORTANT: Do not include any visible hands, smartphones, phones, or camera equipment in the final image - only show the people and background.'
+              text: 'Both individuals must be smiling, looking directly into the lens, and their precise facial likenesses, clothing, and details from their respective input images must be accurately and seamlessly preserved. Maintain consistent, warm, soft, natural daylight and ensure the overall vibe is joyful and spontaneous. The final image must appear as a spontaneous, single-shot photograph taken in the original environment of the BASE background image. IMPORTANT: Do not include any visible hands, smartphones, phones, or camera equipment in the final image - only show the people and background.'
             }
           ]
         }

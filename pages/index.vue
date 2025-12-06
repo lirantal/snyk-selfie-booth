@@ -17,7 +17,23 @@
 
       <div class="upload-section">
         <div v-if="!uploadedImage && !generatedImage" class="upload-area">
-          <label for="file-upload" class="upload-button">
+          <div class="email-section">
+            <input
+              v-model="userEmail"
+              type="email"
+              placeholder="> ENTER YOUR EMAIL"
+              class="email-input"
+              required
+            />
+            <label class="marketing-consent">
+              By entering your email, you agree to receive marketing emails
+            </label>
+          </div>
+          <label 
+            for="file-upload" 
+            class="upload-button"
+            :class="{ disabled: !isEmailValid }"
+          >
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
               <polyline points="17 8 12 3 7 8"></polyline>
@@ -31,6 +47,7 @@
             accept="image/jpeg,image/jpg,image/png,image/webp"
             @change="handleFileUpload"
             class="file-input"
+            :disabled="!isEmailValid"
           />
         </div>
 
@@ -70,14 +87,25 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
 const uploadedImage = ref<string | null>(null)
 const generatedImage = ref<string | null>(null)
 const loading = ref(false)
 const error = ref<string | null>(null)
+const userEmail = ref<string>('')
+
+const isEmailValid = computed(() => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  return emailRegex.test(userEmail.value)
+})
 
 const handleFileUpload = (event: Event) => {
+  if (!isEmailValid.value) {
+    error.value = 'Please enter a valid email address first.'
+    return
+  }
+
   const target = event.target as HTMLInputElement
   const file = target.files?.[0]
   
@@ -114,7 +142,10 @@ const generateSelfie = async () => {
   try {
     // Convert base64 data URL to blob for FormData
     const base64Data = uploadedImage.value.split(',')[1]
-    const byteCharacters = atob(base64Data)
+    if (!base64Data) {
+      throw new Error('Invalid image data')
+    }
+    const byteCharacters = atob(base64Data as string)
     const byteNumbers = new Array(byteCharacters.length)
     for (let i = 0; i < byteCharacters.length; i++) {
       byteNumbers[i] = byteCharacters.charCodeAt(i)
@@ -158,6 +189,7 @@ const resetAll = () => {
   uploadedImage.value = null
   generatedImage.value = null
   error.value = null
+  userEmail.value = ''
   const fileInput = document.getElementById('file-upload') as HTMLInputElement
   if (fileInput) {
     fileInput.value = ''
@@ -349,6 +381,66 @@ const downloadImage = () => {
 
 .upload-area {
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.email-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.email-input {
+  width: 100%;
+  padding: 1rem;
+  background: #000;
+  color: #00ff41;
+  border: 2px solid #00ff41;
+  border-radius: 0;
+  font-size: 1rem;
+  font-family: 'Courier New', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  box-shadow: 
+    0 0 10px rgba(0, 255, 65, 0.3),
+    inset 0 0 10px rgba(0, 255, 65, 0.1);
+  transition: all 0.2s ease;
+}
+
+.email-input::placeholder {
+  color: rgba(0, 255, 65, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.email-input:focus {
+  outline: none;
+  background: rgba(0, 255, 65, 0.05);
+  box-shadow: 
+    0 0 20px rgba(0, 255, 65, 0.5),
+    inset 0 0 20px rgba(0, 255, 65, 0.2);
+  text-shadow: 0 0 10px rgba(0, 255, 65, 0.8);
+}
+
+.email-input:invalid:not(:placeholder-shown) {
+  border-color: #ff0040;
+  box-shadow: 
+    0 0 10px rgba(255, 0, 64, 0.3),
+    inset 0 0 10px rgba(255, 0, 64, 0.1);
+}
+
+.marketing-consent {
+  color: rgba(0, 255, 65, 0.7);
+  font-size: 0.85rem;
+  font-family: 'Courier New', monospace;
+  text-align: center;
+  margin: 0;
+  line-height: 1.4;
 }
 
 .file-input {
@@ -386,6 +478,24 @@ const downloadImage = () => {
 
 .upload-button:active {
   background: rgba(0, 255, 65, 0.2);
+}
+
+.upload-button.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+  border-color: rgba(0, 255, 65, 0.3);
+  box-shadow: 
+    0 0 5px rgba(0, 255, 65, 0.1),
+    inset 0 0 5px rgba(0, 255, 65, 0.05);
+}
+
+.upload-button.disabled:hover {
+  background: #000;
+  box-shadow: 
+    0 0 5px rgba(0, 255, 65, 0.1),
+    inset 0 0 5px rgba(0, 255, 65, 0.05);
+  text-shadow: none;
 }
 
 .preview-section {
