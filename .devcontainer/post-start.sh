@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Runs after each container start (postStartCommand in devcontainer.json).
-# Extend with more steps here as needed (e.g. source scripts from .devcontainer/utils/).
+# post-start: runs after each container start (postStartCommand in devcontainer.json).
+# Naming matches post-create.sh; extend with more steps as needed (e.g. source scripts from .devcontainer/utils/).
 
 main() {
   remove_ephemeral_env_file_if_present
