@@ -5,7 +5,7 @@ Run this project in a **consistent Node.js 24 + TypeScript** environment without
 ## Why use it?
 
 - **Same stack for everyone** — Node 24, pnpm, and tooling match CI and collaborators.
-- **Fast onboarding** — Open the folder in a container; `post-create.sh` runs once after create (git prefs, CLIs, then `pnpm install` via `utils/post-install.sh`).
+- **Fast onboarding** — Open the folder in a container; `post-create.sh` runs once after create (git prefs, CLIs, then `pnpm install` via `utils/deps-install.sh`).
 - **Host secrets, container dev** — `ANTHROPIC_API_KEY` and `SNYK_TOKEN` are passed from your Mac/Linux session into the container when set locally (see below).
 - **Optional CLI workflow** — Use `start.sh` if you prefer a terminal-driven container instead of only the editor.
 
@@ -14,8 +14,8 @@ Run this project in a **consistent Node.js 24 + TypeScript** environment without
 | File | Role |
 |------|------|
 | `devcontainer.json` | Image, mounts (e.g. your `~/.gitconfig`), lifecycle commands, env forwarding. |
-| `post-create.sh` | Index script for post-create: local git prefs, [APM](https://github.com/microsoft/apm), 1Password CLI, then delegates to `utils/post-install.sh`. |
-| `utils/post-install.sh` | Runs `pnpm install` when `package.json` exists (errors do not fail container create). |
+| `post-create.sh` | Index script for post-create: local git prefs, [APM](https://github.com/microsoft/apm), 1Password CLI, then delegates to `utils/deps-install.sh`. |
+| `utils/deps-install.sh` | Runs `pnpm install` when `package.json` exists (errors do not fail container create). |
 | `start.sh` | Brings the dev container up with the Dev Containers CLI, then opens a shell **inside** the container. |
 
 ## Usage

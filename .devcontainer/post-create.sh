@@ -8,7 +8,7 @@ main() {
   install_apm
   # install_opencode_cli
   install_1password_cli
-  run_post_install
+  run_deps_install
 }
 
 configure_local_git() {
@@ -39,8 +39,8 @@ install_1password_cli() {
   sudo mv /tmp/op /usr/local/bin/op && chmod +x /usr/local/bin/op && rm /tmp/op.zip
 }
 
-run_post_install() {
-  bash "${SCRIPT_DIR}/utils/post-install.sh"
+run_deps_install() {
+  bash "${SCRIPT_DIR}/utils/deps-install.sh"
 }
 
 main "$@"
