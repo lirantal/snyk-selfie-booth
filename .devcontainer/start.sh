@@ -47,7 +47,7 @@ Notes:
 EOF
 }
 
-# Container-side TCP port published via runArgs, e.g. "127.0.0.1::6969" (Docker -p host::ctr).
+# Container-side TCP port published via runArgs, e.g. "127.0.0.1::3000" (Docker -p host::ctr).
 # Requires GNU grep (-P); same as the containerId parse below.
 publish_container_port_from_devcontainer_json() {
   local f="$SCRIPT_DIR/devcontainer.json"

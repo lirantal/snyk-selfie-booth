@@ -10,22 +10,42 @@
             "shellautocompletion": true
         }
     },
-    // Ask the editor to forward the container port.
-    // Do NOT publish it with Docker appPort.
-    "forwardPorts": [6969],
+    // Ask the editor to forward these container ports (no Docker appPort).
+    "forwardPorts": [8787, 3005, 3001, 3000],
 
     "portsAttributes": {
-    "6969": {
-        "label": "Web dev server",
-        "protocol": "http",
-        "onAutoForward": "notify",
-        "requireLocalPort": false
-    }
+        "8787": {
+            "label": "Hono Dev Server",
+            "onAutoForward": "notify"
+        },
+        "3005": {
+            "label": "Nuxt Dev Server",
+            "onAutoForward": "notify"
+        },
+        "3001": {
+            "label": "Nuxt Preview Server",
+            "onAutoForward": "silent"
+        },
+        "3000": {
+            "label": "Published dev server",
+            "protocol": "http",
+            "onAutoForward": "notify",
+            "requireLocalPort": false
+        },
+        // only enable when running Caddy http proxy in the container
+        // "80": {
+        //     "label": "Caddy HTTP",
+        //     "onAutoForward": "notify"
+        // },
+        // "443": {
+        //     "label": "Caddy HTTPS",
+        //     "onAutoForward": "notify"
+        // }
     },
 
     "otherPortsAttributes": {
-    "onAutoForward": "notify",
-    "requireLocalPort": false
+        "onAutoForward": "notify",
+        "requireLocalPort": false
     },
 
     "mounts": [
@@ -38,14 +58,12 @@
 
     // Initialize optional host-side secrets before container create/start.
     "initializeCommand": "bash .devcontainer/initialize.sh",
-    // once up, you can discover the locally forwarded port with:
-    // docker port <container-name-or-id> 6969/tcp
-    // or
-    // docker ps --format "{{.Names}}\t{{.Ports}}" | grep 6969
+    // After up, discover the published host binding, e.g.:
+    // docker port <container-name-or-id> 3000/tcp
     "runArgs": [
-        // publish the container port 6969 to the host port 6969
+        // publish container port 3000 with dynamic host port (CLI / start.sh)
         "-p",
-        "127.0.0.1::6969",
+        "127.0.0.1::3000",
         // pass the development environment file to the container
         "--env-file",
         "${localWorkspaceFolder}/.env.development"
