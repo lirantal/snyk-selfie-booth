@@ -4,9 +4,9 @@
 # @summary Start the Dev Container for this workspace and attach an interactive shell.
 #
 # Uses @devcontainers/cli to run `devcontainer up` then `devcontainer exec bash`.
-# Host port publishing is handled by **runArgs** in devcontainer.json, which passes
-# `-p 127.0.0.1::6969` to Docker for dynamic host-port assignment. After `devcontainer up`,
-# this script resolves the container and prints the mapped URL via `docker port`.
+# Host port publishing comes from **runArgs** in devcontainer.json (e.g. `-p` and
+# `127.0.0.1::<containerPort>` for dynamic host binding). After `devcontainer up`, this
+# script reads that container port from runArgs and prints the mapped URL via `docker port`.
 #
 # @usage
 #   .devcontainer/start.sh [options]
@@ -42,9 +42,19 @@ Options:
   --help, -h    Show this help and exit.
 
 Notes:
-  Port publishing uses runArgs ("-p 127.0.0.1::6969") for dynamic host-port assignment.
-  After startup the script prints the mapped host port via docker port.
+  Port publishing uses runArgs (Docker -p ...::<containerPort>). The script greps that
+  container port from devcontainer.json for the post-up URL hint.
 EOF
+}
+
+# Container-side TCP port published via runArgs, e.g. "127.0.0.1::6969" (Docker -p host::ctr).
+# Requires GNU grep (-P); same as the containerId parse below.
+publish_container_port_from_devcontainer_json() {
+  local f="$SCRIPT_DIR/devcontainer.json"
+  if [ ! -r "$f" ]; then
+    return 1
+  fi
+  sed 's|//.*||' "$f" | grep -oP '"[0-9.]+\:\:\K[0-9]+(?=")' | head -n1
 }
 
 RECREATE=false
@@ -82,14 +92,20 @@ if [ -z "$CONTAINER_ID" ]; then
   CONTAINER_ID="$(docker ps --filter "label=devcontainer.local_folder=$WORKSPACE_FOLDER" --format '{{.ID}}' | head -n1)"
 fi
 
+CONTAINER_PORT="$(publish_container_port_from_devcontainer_json || true)"
 if [ -n "$CONTAINER_ID" ]; then
-  HOST_BINDING="$(docker port "$CONTAINER_ID" 6969/tcp 2>/dev/null | head -n1)" || true
-  if [ -n "$HOST_BINDING" ]; then
-    echo ""
-    echo "Dev server available at: http://${HOST_BINDING}"
-    echo ""
+  if [ -n "$CONTAINER_PORT" ]; then
+    HOST_BINDING="$(docker port "$CONTAINER_ID" "${CONTAINER_PORT}/tcp" 2>/dev/null | head -n1)" || true
+    if [ -n "$HOST_BINDING" ]; then
+      echo ""
+      echo "Dev server available at: http://${HOST_BINDING}"
+      echo ""
+    else
+      echo "Warning: container is running but port ${CONTAINER_PORT}/tcp is not mapped." >&2
+    fi
   else
-    echo "Warning: container is running but port 6969/tcp is not mapped." >&2
+    echo "Warning: could not find a runArgs publish port (expected a quoted string like \"127.0.0.1::<port>\")." >&2
+    echo "         Skipping docker port URL hint." >&2
   fi
 else
   echo "Warning: could not resolve container ID; skipping port lookup." >&2
